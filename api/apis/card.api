@@ -1,0 +1,117 @@
+syntax = "v1"
+
+info (
+	title:   "Pelago Card API"
+	desc:    "Pelago聚合卡业务API - 商户入驻功能"
+	author:  "Pelago Team"
+	email:   "dev@pelago.com"
+	version: "v1.0.0"
+)
+
+// ========== 商户相关接口 ==========
+// 商户注册请求
+type MerchantRegisterReq {
+	EntityName          string `json:"entity_name" validate:"required"` // 商户主体名称，公司名称
+	BrandName           string `json:"brand_name" validate:"required"` // 商户品牌名称
+	WebsiteUrl          string `json:"website_url,optional"` // 商户官方网站
+	MerchantLogo        string `json:"merchant_logo,optional"` // 商户官方logo URL
+	MerchantCountry     string `json:"merchant_country" validate:"required"` // 商户经营国家
+	ContactName         string `json:"contact_name" validate:"required"` // 商户主要联系人姓名
+	ContactEmail        string `json:"contact_email" validate:"required,email"` // 商户主要联系人邮箱
+	BusinessDescription string `json:"business_description,optional"` // 商户业务描述
+}
+
+// 商户注册响应
+type MerchantRegisterResp {
+	MerchantId     string `json:"merchant_id"` // 系统生成的商户ID
+	ApiKey         string `json:"api_key"` // 系统生成的API密钥
+	VerifiedStatus string `json:"verified_status"` // 审核状态
+	MerchantStatus string `json:"merchant_status"` // 商户状态
+	CreatedTime    string `json:"created_time"` // 创建时间
+}
+
+// 获取商户信息请求
+type GetMerchantReq {
+	MerchantId string `path:"merchant_id" validate:"required"` // 商户ID
+}
+
+// 商户信息
+type MerchantInfo {
+	MerchantId          string `json:"merchant_id"` // 商户ID
+	EntityName          string `json:"entity_name"` // 商户主体名称
+	BrandName           string `json:"brand_name"` // 商户品牌名称
+	WebsiteUrl          string `json:"website_url"` // 商户官方网站
+	MerchantLogo        string `json:"merchant_logo"` // 商户官方logo URL
+	MerchantCountry     string `json:"merchant_country"` // 商户经营国家
+	ContactName         string `json:"contact_name"` // 商户主要联系人姓名
+	ContactEmail        string `json:"contact_email"` // 商户主要联系人邮箱
+	ApiKey              string `json:"api_key"` // API密钥
+	VerifiedStatus      string `json:"verified_status"` // 审核状态
+	MerchantStatus      string `json:"merchant_status"` // 商户状态
+	BusinessDescription string `json:"business_description"` // 商户业务描述
+	CreatedTime         string `json:"created_time"` // 创建时间
+	UpdatedTime         string `json:"updated_time"` // 更新时间
+}
+
+// 获取商户信息响应
+type GetMerchantResp {
+	Merchant MerchantInfo `json:"merchant"` // 商户信息
+}
+
+// 更新商户信息请求
+type UpdateMerchantReq {
+	MerchantId          string `json:"merchant_id" validate:"required"` // 商户ID
+	EntityName          string `json:"entity_name" validate:"required"` // 商户主体名称
+	BrandName           string `json:"brand_name" validate:"required"` // 商户品牌名称
+	WebsiteUrl          string `json:"website_url,optional"` // 商户官方网站
+	MerchantLogo        string `json:"merchant_logo,optional"` // 商户官方logo URL
+	MerchantCountry     string `json:"merchant_country" validate:"required"` // 商户经营国家
+	ContactName         string `json:"contact_name" validate:"required"` // 商户主要联系人姓名
+	ContactEmail        string `json:"contact_email" validate:"required,email"` // 商户主要联系人邮箱
+	BusinessDescription string `json:"business_description,optional"` // 商户业务描述
+}
+
+// 更新商户信息响应
+type UpdateMerchantResp {
+	Merchant MerchantInfo `json:"merchant"` // 更新后的商户信息
+}
+
+// 商户列表查询请求
+type ListMerchantsReq {
+	Page           int    `form:"page,default=1"` // 页码，从1开始
+	PageSize       int    `form:"page_size,default=10"` // 每页大小
+	VerifiedStatus string `form:"verified_status,optional"` // 筛选审核状态
+	MerchantStatus string `form:"merchant_status,optional"` // 筛选商户状态
+}
+
+// 商户列表查询响应
+type ListMerchantsResp {
+	Merchants []MerchantInfo `json:"merchants"` // 商户列表
+	Total     int            `json:"total"` // 总数量
+	Page      int            `json:"page"` // 当前页码
+	PageSize  int            `json:"page_size"` // 每页大小
+}
+
+// API路由定义
+@server (
+	group:  merchant
+	prefix: /api/merchant
+)
+service card-api {
+	@doc "商户入驻注册"
+	@handler merchantRegister
+	post /register (MerchantRegisterReq) returns (MerchantRegisterResp)
+
+	@doc "获取商户信息"
+	@handler getMerchant
+	get /:merchant_id (GetMerchantReq) returns (GetMerchantResp)
+
+	@doc "更新商户信息"
+	@handler updateMerchant
+	put /update (UpdateMerchantReq) returns (UpdateMerchantResp)
+
+	@doc "商户列表查询"
+	@handler listMerchants
+	get /list (ListMerchantsReq) returns (ListMerchantsResp)
+}
+

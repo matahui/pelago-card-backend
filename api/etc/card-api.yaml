@@ -1,0 +1,23 @@
+Name: card-api
+Host: 0.0.0.0
+Port: 8888
+
+# RPC客户端配置
+CardRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: card.rpc
+
+# 日志配置
+Log:
+  ServiceName: card-api
+  Mode: console  # console, file, volume
+  Level: info    # error, warn, info, debug
+  Encoding: json # json, plain
+  TimeFormat: 2006-01-02T15:04:05.000Z07:00
+  Path: logs     # 日志文件路径
+  MaxContentLength: 8192
+  Compress: true
+  KeepDays: 7
+  StackCooldownMillis: 100

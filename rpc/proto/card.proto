@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package card;
+
+option go_package = "./card";
+//goctl rpc protoc proto/card.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=./card --style=gozero
+// 商户服务
+service CardService {
+  // 商户入驻注册
+  rpc RegisterMerchant(RegisterMerchantReq) returns (RegisterMerchantResp);
+  // 获取商户信息
+  rpc GetMerchant(GetMerchantReq) returns (GetMerchantResp);
+  // 更新商户信息
+  rpc UpdateMerchant(UpdateMerchantReq) returns (UpdateMerchantResp);
+  // 商户列表查询
+  rpc ListMerchants(ListMerchantsReq) returns (ListMerchantsResp);
+}
+
+// ========== 商户相关消息 ==========
+
+// 商户注册请求
+message RegisterMerchantReq {
+  string entity_name = 1;          // 商户主体名称，公司名称
+  string brand_name = 2;           // 商户品牌名称
+  string website_url = 3;          // 商户官方网站
+  string merchant_logo = 4;        // 商户官方logo URL
+  string merchant_country = 5;     // 商户经营国家
+  string contact_name = 6;         // 商户主要联系人姓名
+  string contact_email = 7;        // 商户主要联系人邮箱
+  string business_description = 8; // 商户业务描述(可选)
+}
+
+// 商户注册响应
+message RegisterMerchantResp {
+  string merchant_id = 1;          // 系统生成的商户ID
+  string api_key = 2;              // 系统生成的API密钥
+  string verified_status = 3;      // 审核状态
+  string merchant_status = 4;      // 商户状态
+  string created_time = 5;         // 创建时间
+}
+
+// 获取商户信息请求
+message GetMerchantReq {
+  string merchant_id = 1;          // 商户ID
+}
+
+// 商户信息
+message MerchantInfo {
+  string merchant_id = 1;          // 商户ID
+  string entity_name = 2;          // 商户主体名称
+  string brand_name = 3;           // 商户品牌名称
+  string website_url = 4;          // 商户官方网站
+  string merchant_logo = 5;        // 商户官方logo URL
+  string merchant_country = 6;     // 商户经营国家
+  string contact_name = 7;         // 商户主要联系人姓名
+  string contact_email = 8;        // 商户主要联系人邮箱
+  string api_key = 9;              // API密钥
+  string verified_status = 10;     // 审核状态
+  string merchant_status = 11;     // 商户状态
+  string business_description = 12; // 商户业务描述
+  string created_time = 13;        // 创建时间
+  string updated_time = 14;        // 更新时间
+}
+
+// 获取商户信息响应
+message GetMerchantResp {
+  MerchantInfo merchant = 1;       // 商户信息
+}
+
+// 更新商户信息请求
+message UpdateMerchantReq {
+  string merchant_id = 1;          // 商户ID
+  string entity_name = 2;          // 商户主体名称
+  string brand_name = 3;           // 商户品牌名称
+  string website_url = 4;          // 商户官方网站
+  string merchant_logo = 5;        // 商户官方logo URL
+  string merchant_country = 6;     // 商户经营国家
+  string contact_name = 7;         // 商户主要联系人姓名
+  string contact_email = 8;        // 商户主要联系人邮箱
+  string business_description = 9; // 商户业务描述
+}
+
+// 更新商户信息响应
+message UpdateMerchantResp {
+  MerchantInfo merchant = 1;       // 更新后的商户信息
+}
+
+// 商户列表查询请求
+message ListMerchantsReq {
+  int32 page = 1;                  // 页码，从1开始
+  int32 page_size = 2;             // 每页大小
+  string verified_status = 3;      // 筛选审核状态(可选)
+  string merchant_status = 4;      // 筛选商户状态(可选)
+}
+
+// 商户列表查询响应
+message ListMerchantsResp {
+  repeated MerchantInfo merchants = 1; // 商户列表
+  int32 total = 2;                     // 总数量
+  int32 page = 3;                      // 当前页码
+  int32 page_size = 4;                 // 每页大小
+} 
