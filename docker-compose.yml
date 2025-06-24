@@ -1,21 +1,18 @@
-
+version: '3.8'
 
 services:
-  # MySQL 数据库
-  mysql:
-    image: mysql:8.0
-    container_name: pelago-card-mysql
+  # PostgreSQL 数据库
+  postgres:
+    image: postgres:15
+    container_name: pelago-card-postgres
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: pelago_card
-      MYSQL_USER: pelago_card
-      MYSQL_PASSWORD: pelago123
+      POSTGRES_DB: pelago_card
+      POSTGRES_USER: pelago_card
+      POSTGRES_PASSWORD: pelago123
     ports:
-      - "3306:3306"
+      - "15432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
-    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      - pgsql_data:/var/lib/postgresql/data
     restart: unless-stopped
 
   # Redis 缓存
@@ -28,18 +25,14 @@ services:
       - redis_data:/data
     restart: unless-stopped
 
-  # Etcd 服务发现
-  etcd:
-    image: bitnami/etcd:latest
-    container_name: pelago-card-etcd
-    environment:
-      - ALLOW_NONE_AUTHENTICATION=yes
-      - ETCD_ADVERTISE_CLIENT_URLS=http://localhost:2379
-      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+  # Consul 服务发现
+  consul:
+    image: consul:1.15
+    container_name: pelago-card-consul
     ports:
-      - "2379:2379"
-    volumes:
-      - etcd_data:/bitnami/etcd
+      - "8500:8500"   # Consul UI/HTTP API
+      - "8600:8600/udp" # DNS
+    command: "agent -dev -client=0.0.0.0"
     restart: unless-stopped
 
   # Jaeger 链路追踪
@@ -54,13 +47,10 @@ services:
       - "14250:14250"  # gRPC
     restart: unless-stopped
 
-
-
 volumes:
-  mysql_data:
+  pgsql_data:
   redis_data:
-  etcd_data:
 
 networks:
-  default:
-    name: pelago-network 
+  pelago-network:
+    driver: bridge

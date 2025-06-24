@@ -1,0 +1,23 @@
+Name: pelagocard-api
+Host: 0.0.0.0
+Port: 8888
+
+CardRpcConf:
+  Consul:
+    Host: consul:8500
+    Key: card.rpc
+
+CardholderRpcConf:
+  Consul:
+    Host: consul:8500
+    Key: cardholder.rpc
+
+MerchantRpcConf:
+  Consul:
+    Host: consul:8500
+    Key: merchant.rpc
+
+IntegrationRpcConf:
+  Consul:
+    Host: consul:8500
+    Key: integration.rpc

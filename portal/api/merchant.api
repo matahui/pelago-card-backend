@@ -1,40 +1,27 @@
 syntax = "v1"
 
-info (
-	title:   "Pelago Card API - Merchant"
-	desc:    "Merchat API"
-	author:  "Pelago Team"
-    version: "v1"
+info(
+	title: "Pelago Card API - Merchant"
+	desc: "Merchant API"
+	author: "Pelago Team"
+	version: "v1"
 )
 
 type MerchantRegisterReq {
-	EntityName          string `json:"entity_name" validate:"required"`
-	BrandName           string `json:"brand_name" validate:"required"`
-	WebsiteUrl          string `json:"website_url,validate:"required"`
-	MerchantLogo        string `json:"merchant_logo,validate:"required"`
-	MerchantCountry     string `json:"merchant_country" validate:"required"`
-	ContactName         string `json:"contact_name" validate:"required"`
-	ContactEmail        string `json:"contact_email" validate:"required,email"`
-	BusinessDescription string `json:"business_description,optional"`
+	Name string `json:"name"`
 }
 
 type MerchantRegisterResp {
-	MerchantId     string `json:"merchant_id"`
-	ApiKey         string `json:"api_key"`
-	VerifiedStatus string `json:"verified_status"`
-	MerchantStatus string `json:"merchant_status"`
-	CreatedTime    string `json:"created_time"`
+	Id int64 `json:"id"`
 }
 
-
-@server (
+@server(
 	prefix: /v1/merchant
-    handler: merchant
+	handler: merchant
+    group: merchant
 )
-
-service pelago-card-api {
+service pelagocard-api {
 	@doc "merchant register"
-	@handler merchantRegister
+	@handler register
 	post /register (MerchantRegisterReq) returns (MerchantRegisterResp)
 }
-

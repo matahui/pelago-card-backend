@@ -1,0 +1,23 @@
+syntax = "v1"
+
+info (
+	title:   "Pelago Card API"
+	desc:    "Main API definition"
+	version: "v1"
+)
+
+// 必须使用双引号导入
+import "merchant.api"
+import "card.api"
+import "cardholder.api"
+
+@server (
+	jwt:        Auth
+	middleware: Logging,Prometheus
+)
+service pelagocard-api {
+	// 全局健康检查
+	@handler healthcheck
+	get /health returns (string)
+}
+

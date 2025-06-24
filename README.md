@@ -73,22 +73,22 @@ Update database connection in configuration files:
 
 ```bash
 # Build RPC service
-go build -o bin/card-rpc rpc/card/card.go
+go build -o bin/card-app app/card/card.go
 
 # Build API service  
-go build -o bin/card-api api/card.go
+go build -o bin/card-portal portal/card.go
 ```
 
 ### 4. Run Services
 
 Start RPC service:
 ```bash
-./bin/card-rpc -f rpc/card/etc/card.yaml
+./bin/card-app -f app/card/etc/card.yaml
 ```
 
 Start API service:
 ```bash
-./bin/card-api -f api/etc/card-api.yaml
+./bin/card-portal -f portal/etc/card-portal.yaml
 ```
 
 ## API Endpoints
@@ -108,17 +108,17 @@ Base URL: `http://localhost:8888`
 
 Generate API code:
 ```bash
-cd api && goctl api go -api apis/card.api -dir . --style=gozero
+cd portal && goctl portal go -portal api/card.portal -dir . --style=gozero
 ```
 
 Generate RPC code:
 ```bash
-cd rpc && goctl rpc protoc proto/card.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=./card --style=gozero
+cd app && goctl app protoc proto/merchant.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=./card --style=gozero
 ```
 
 Generate model code:
 ```bash
-cd rpc/card/internal && goctl model mysql datasource -url="root:password@tcp(localhost:3306)/pelago_card" -table="merchants" -dir="./model" --style=gozero
+cd app/card/internal && goctl model mysql datasource -url="root:password@tcp(localhost:3306)/pelago_card" -table="merchants" -dir="./model" --style=gozero
 ```
 
 ### Database Schema

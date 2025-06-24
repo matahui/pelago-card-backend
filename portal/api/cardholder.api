@@ -1,0 +1,29 @@
+syntax = "v1"
+
+info(
+	title: "Pelago Card API - Cardholder"
+	desc: "Cardholder API"
+	author: "Pelago Team"
+	version: "v1"
+)
+
+type CardholderRegisterReq {
+	// 添加你的字段
+	Name string `json:"name"`
+}
+
+type CardholderRegisterResp {
+	// 添加你的字段
+	Id int64 `json:"id"`
+}
+
+@server(
+	prefix: /v1/cardholder
+	handler: cardholder
+    group: cardholder
+)
+service pelagocard-api {  // 注意服务名统一
+	@doc "cardholder register"
+	@handler register
+	post /register (CardholderRegisterReq) returns (CardholderRegisterResp)
+}

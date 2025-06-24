@@ -1,0 +1,27 @@
+syntax = "v1"
+
+info(
+	title: "Pelago Card API - Card"
+	desc: "Card Management API"
+	author: "Pelago Team"
+	version: "v1"
+)
+
+type OpenCardReq {
+	Name string `json:"name"`
+}
+
+type OpenCardResp {
+	Id int64 `json:"id"`
+}
+
+@server(
+	prefix: /v1/card
+	handler: card
+    group: card
+)
+service pelagocard-api {
+	@doc "open card"
+	@handler open
+	post /open (OpenCardReq) returns (OpenCardResp)
+}
