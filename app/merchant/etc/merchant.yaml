@@ -1,0 +1,5 @@
+Name: merchant.rpc
+ListenOn: 0.0.0.0:8080
+Consul:
+  Host: consul:8500
+  Key: merchant.rpc

@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package card;
+
+option go_package = "./merchant";
+//goctl rpc protoc proto/card.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=./card --style=goZero
+
+
+service MerchantService {
+  rpc RegisterMerchant(RegisterMerchantReq) returns (RegisterMerchantResp);
+}
+
+
+message RegisterMerchantReq {
+  string entity_name = 1;          // 商户主体名称，公司名称
+  string brand_name = 2;           // 商户品牌名称
+  string website_url = 3;          // 商户官方网站
+  string merchant_logo = 4;        // 商户官方logo URL
+  string merchant_country = 5;     // 商户经营国家
+  string contact_name = 6;         // 商户主要联系人姓名
+  string contact_email = 7;        // 商户主要联系人邮箱
+  string business_description = 8; // 商户业务描述(可选)
+}
+
+message RegisterMerchantResp {
+  string merchant_id = 1;          // 系统生成的商户ID
+  string api_key = 2;              // 系统生成的API密钥
+  string verified_status = 3;      // 审核状态
+  string merchant_status = 4;      // 商户状态
+  string created_time = 5;         // 创建时间
+}

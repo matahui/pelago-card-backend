@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package card;
+
+option go_package = "./integration";
+//goctl rpc protoc proto/card.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=./card --style=goZero
+
+
+service IntegrationService {
+  rpc Recharge(RechargeReq) returns (RechargeResp);
+}
+
+
+message RechargeReq {
+}
+
+message RechargeResp {
+}
